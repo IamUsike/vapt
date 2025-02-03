@@ -26,8 +26,8 @@ const Navbar = () => {
                     <span>DevEstate</span>
                 </Link>
                 <Link to="/">Home</Link>
-                <Link to="/">About</Link>
-                <Link to="/">Contact</Link>
+                <Link to="/about">About</Link>
+                <Link to="/contact">Contact</Link>
                 <Link to="/">Agents</Link>
             </div>
             <div className='right'>
@@ -51,8 +51,8 @@ const Navbar = () => {
                 </div>
                 <div className={open ? "menu active" : "menu"}>
                     <Link to="/">Home</Link>
-                    <Link to="/">About</Link>
-                    <Link to="/">Contact</Link>
+                    <Link to="/about">About</Link>
+                    <Link to="/contact">Contact</Link>
                     <Link to="/">Agents</Link>                    
                     <Link to="/">Sign In</Link>                    
                     <Link to="/">Sign Up</Link>                    
