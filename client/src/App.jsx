@@ -1,6 +1,6 @@
 import {
   createBrowserRouter,
-  RouterProvider
+  RouterProvider,
 } from "react-router-dom";
 import ListPage from './routes/listPage/ListPage';
 import HomePage from './routes/homePage/HomePage';
@@ -13,63 +13,66 @@ import ProfileUpdatePage from "./routes/profileUpdatePage/ProfileUpdatePage";
 import NewPostPage from "./routes/newPostPage/NewPostPage";
 import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loaders";
 
+import ContactPage from "./routes/contactPage/ContactPage"; // Import the ContactPage component
 
 function App() {
-
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Layout/>,
+      element: <Layout />,
       children: [
         {
           path: "/",
-          element: <HomePage/>
+          element: <HomePage />,
         },
         {
           path: "/list",
-          element: <ListPage/>,
+          element: <ListPage />,
           loader: listPageLoader,
         },
         {
           path: "/:id",
-          element: <SinglePage/>,
+          element: <SinglePage />,
           loader: singlePageLoader,
         },
         {
-          path:"/login",
-          element:<Login/>
+          path: "/login",
+          element: <Login />,
         },
         {
-          path:"/register",
-          element:<Register/>
+          path: "/register",
+          element: <Register />,
         },
-        
-      ]
+        {
+          path: "/contact", // Add the route for the ContactPage
+          element: <ContactPage />,
+        },
+      ],
     },
     {
       path: "/",
-      element: <RequiredAuth/>,
+      element: <RequiredAuth />,
       children: [
         {
           path: "/profile",
-          element: <ProfilePage/>,
+          element: <ProfilePage />,
           loader: profilePageLoader,
         },
         {
-          path:"/profile/update",
-          element:<ProfileUpdatePage/>
+          path: "/profile/update",
+          element: <ProfileUpdatePage />,
         },
         {
-          path:"/add",
-          element:<NewPostPage/>
+          path: "/add",
+          element: <NewPostPage />,
         },
-      ]
-    }
+      ],
+    },
   ]);
 
   return (
-    <RouterProvider router={router}/>
+    <RouterProvider router={router} />
   );
 }
 
-export default App
+export default App;
