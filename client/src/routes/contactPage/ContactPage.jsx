@@ -1,10 +1,60 @@
-import { Mail, MapPin, Phone } from "lucide-react";
 import "./Contact.scss";
+import { useState } from "react"
+import { Mail, MapPin, Phone } from "lucide-react"
+import apiRequest from "../../lib/apiRequest.js"
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+
+  const handleChange = (e) => {
+    const { id, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
+
+    try {
+      const response = await apiRequest.post("/contacts", formData)
+
+      if (response.status === 201) {
+        setSuccess(true)
+        // Reset form
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+        })
+      }
+    } catch (err) {
+      setError(err?.response?.data?.message || "Failed to send message")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="contact-page">
       <main className="contact-container">
+        {error && <div className="error-message">{error}</div>}
+        {success && (
+          <div className="success-message">Your message has been sent successfully. We'll get back to you soon!</div>
+        )}
         <div className="contact-grid">
           {/* Contact Form Section */}
           <div className="contact-form-section">
@@ -15,32 +65,20 @@ export default function ContactPage() {
               </p>
             </div>
 
-            <form className="contact-form">
-              <div className="form-grid">
-                <div>
-                  <label htmlFor="firstName" className="form-label">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    id="firstName"
-                    placeholder="John"
-                    className="form-input"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="lastName" className="form-label">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    id="lastName"
-                    placeholder="Doe"
-                    className="form-input"
-                    required
-                  />
-                </div>
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div>
+                <label htmlFor="name" className="form-label">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  placeholder="John Doe"
+                  className="form-input"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
@@ -53,18 +91,23 @@ export default function ContactPage() {
                   placeholder="john@example.com"
                   className="form-input"
                   required
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
 
               <div>
-                <label htmlFor="phone" className="form-label">
-                  Phone Number
+                <label htmlFor="subject" className="form-label">
+                  Subject
                 </label>
                 <input
-                  type="tel"
-                  id="phone"
-                  placeholder="+1 (555) 000-0000"
+                  type="text"
+                  id="subject"
+                  placeholder="Inquiry about..."
                   className="form-input"
+                  required
+                  value={formData.subject}
+                  onChange={handleChange}
                 />
               </div>
 
@@ -77,79 +120,39 @@ export default function ContactPage() {
                   placeholder="Tell us about your requirements..."
                   className="form-textarea"
                   required
+                  value={formData.message}
+                  onChange={handleChange}
                 />
               </div>
 
-              <button type="submit" className="submit-button">
-                Send Message
+              <button type="submit" className="submit-button" disabled={loading}>
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
 
           {/* Contact Information Section */}
           <div className="contact-info-section">
-            <div className="contact-info-card">
-              <h2 className="contact-info-heading">Contact Information</h2>
-
-              <div className="contact-info-content">
-                <div className="contact-info-item">
-                  <MapPin className="contact-icon" />
-                  <div>
-                    <h3 className="contact-info-title">Office Address</h3>
-                    <p className="contact-info-text">
-                      123 Real Estate Avenue
-                      <br />
-                      New York, NY 10001
-                    </p>
-                  </div>
-                </div>
-
-                <div className="contact-info-item">
-                  <Phone className="contact-icon" />
-                  <div>
-                    <h3 className="contact-info-title">Phone</h3>
-                    <p className="contact-info-text">
-                      +1 (555) 123-4567
-                      <br />
-                      Mon-Fri from 9am to 6pm
-                    </p>
-                  </div>
-                </div>
-
-                <div className="contact-info-item">
-                  <Mail className="contact-icon" />
-                  <div>
-                    <h3 className="contact-info-title">Email</h3>
-                    <p className="contact-info-text">
-                      contact@lamaestate.com
-                      <br />
-                      support@lamaestate.com
-                    </p>
-                  </div>
-                </div>
+            <h2 className="info-heading">Contact Information</h2>
+            <p className="info-subheading">Feel free to reach out to us using the information below.</p>
+            <div className="info-list">
+              <div className="info-item">
+                <Phone className="info-icon" />
+                <p>+1 (555) 000-0000</p>
               </div>
-
-              <div className="office-hours">
-                <h3 className="office-hours-heading">Office Hours</h3>
-                <div className="office-hours-content">
-                  <div className="office-hours-item">
-                    <span>Monday - Friday:</span>
-                    <span>9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="office-hours-item">
-                    <span>Saturday:</span>
-                    <span>10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="office-hours-item">
-                    <span>Sunday:</span>
-                    <span>Closed</span>
-                  </div>
-                </div>
+              <div className="info-item">
+                <Mail className="info-icon" />
+                <p>info@example.com</p>
+              </div>
+              <div className="info-item">
+                <MapPin className="info-icon" />
+                <p>123 Main St, Anytown, USA 12345</p>
               </div>
             </div>
           </div>
         </div>
       </main>
     </div>
-  );
+  )
 }
+

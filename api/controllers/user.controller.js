@@ -154,7 +154,7 @@ export const profilePosts = async (req, res) => {
 
 
 export const getNotificationNumber = async (req, res) => {
-  const tokenUserId = req.userId;
+  const tokenUserId = req.userId
 
   try {
     const number = await prisma.chat.count({
@@ -164,15 +164,15 @@ export const getNotificationNumber = async (req, res) => {
         },
         NOT: {
           seenBy: {
-            hasSome: [number],
+            hasSome: [tokenUserId],
           },
         },
       },
-    });
+    })
 
-    res.status(200).json({});
+    res.status(200).json({ number })
   } catch (error) {
-    console.log(error);
-    res.status(500).json({message: "Failed to get notification number"});
+    console.log(error)
+    res.status(500).json({ message: "Failed to get notification number" })
   }
-};
+}

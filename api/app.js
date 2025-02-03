@@ -6,6 +6,7 @@ import authRouter from "./routes/auth.route.js";
 import userRouter from "./routes/user.route.js";
 import chatRouter from "./routes/chat.route.js";
 import messageRouter from "./routes/message.route.js"
+import contactRouter from "./routes/contact.route.js"
 
 import testRoute from "./routes/test.route.js";
 import dotenv from "dotenv"
@@ -33,6 +34,7 @@ app.use("/api/chats", chatRouter);
 
 app.use("/api/messages", messageRouter);
 
+app.use("/api", contactRouter)
 
 app.use("/api/test", testRoute);
 

@@ -1,7 +1,8 @@
-import prisma from "../lib/prisma.js"
-
+import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
+
 export const createContact = async (req, res) => {
+  const { email, name, subject, message } = req.body
   try {
     if(!email || !name || !subject || !message){
       return res.status(400).json({
@@ -17,12 +18,10 @@ export const createContact = async (req, res) => {
         message
       }
     })
-
     return res.status(201).json({
       success: true, 
       data: contact
     })
-
   } catch (error) {
       console.log("Error in creating Contact: ", error.message);
       return res.status(500).json({
@@ -30,58 +29,46 @@ export const createContact = async (req, res) => {
       message:'Internal Server Error'
     })
   }
-
 }
 
-
-//get all contacts, for admin  
-
-const export getContacts = async (req, res)=> {
+export const getContacts = async (req, res)=> {
   try{
     const contacts = await prisma.contact.findMany({
       orderBy: {
         createdAt: 'desc'
       }
     })
-
     return res.status(200).json({
       success: true,
       data: contacts
     })
   }catch(err){
-  console.log('Error fetching contacts: ', err.message)
-  return res.send(500).json({
+    console.log('Error fetching contacts: ', err.message)
+    return res.status(500).json({
       success: false, 
       message: "Internal server error"
     })
-
   }
 }
-
 
 export const updateContactStatus = async (req, res) => {
   try{
     const {id} = req.params
     const {status} = req.body
   
-    const contact = await prisma.contact.update({  // 3. Update operation
-      where: { id },                 // 4. Find by ID
-      data: { status }               // 5. Update status
+    const contact = await prisma.contact.update({
+      where: { id },
+      data: { status }
     })
-
-    return res.status(200).json({    // 6. Return success response
+    return res.status(200).json({
       success: true,
       data: contact
     })
-
   } catch(err){
     console.log("Error while updating the contacts: ", err.message)
-    return res.send(500).json({
+    return res.status(500).json({
       success: false, 
       message: "Internal server error"
     })
   }
-
-
 }
-
