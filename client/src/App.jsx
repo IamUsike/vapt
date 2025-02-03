@@ -15,6 +15,7 @@ import { listPageLoader, profilePageLoader, singlePageLoader } from "./lib/loade
 
 import ContactPage from "./routes/contactPage/ContactPage"; // Import the ContactPage component
 
+import AboutPage from "./routes/aboutPage/AboutPage";
 function App() {
   const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ function App() {
         {
           path: "/contact", // Add the route for the ContactPage
           element: <ContactPage />,
+        },
+        {
+          path: "/about", // Add the route for the ContactPage
+          element: <AboutPage />,
         },
       ],
     },
