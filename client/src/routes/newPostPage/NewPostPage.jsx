@@ -48,7 +48,7 @@ function NewPostPage() {
       navigate("/"+res.data.id);
     } catch (error) {
       console.log(error);
-      setError(error)
+      setError(error.message || "An error occurred")
     }
   }
 

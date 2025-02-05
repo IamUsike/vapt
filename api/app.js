@@ -15,7 +15,8 @@ dotenv.config()
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://dev-estate-saa21.netlify.app"]
+  origin: ["http://localhost:5173", "https://dev-estate-saa21.netlify.app"],
+  credentials:true,
 }));
 
 
